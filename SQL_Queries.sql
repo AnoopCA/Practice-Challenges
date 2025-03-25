@@ -57,7 +57,6 @@ create table dependent(
 );
 
 
-
 insert into employee(fname,minit,lname,ssn,bdate,address,sex,salary,super_ssn,dno) VALUES
 ('John','B','Smith','123456789','1965-01-09','731 Fondren, Houston, TX','M',30000,'333445555',5),
 ('Franklin','T','Wong','333445555','1955-01-09','638 Fondren, Houston, TX','M',40000,'888665555',5),
@@ -114,3 +113,61 @@ insert into dependent(essn,dependent_name,sex,bdate,relationship) values
 ('123456789', 'Michael', 'M', '1988-04-05', 'Son'),
 ('123456789', 'Alice', 'M', '1988-04-05', 'Daughter'),
 ('123456789', 'Elizabeth', 'M', '1967-04-05', 'Spouse');
+
+
+#------------------------------------------------------------------------------------------------------------------------------
+
+# employee - fname, minit, lname, ssn,bdate, address, sex,salary, super_ssn, dno
+# department - dname, dnumber, mgr_ssn, mgr_start_date
+# dept_locations - dnumber, dlocation
+# works_on - essn, pno, hours
+# project - pname, pnumber, plocation, dnum
+# dependent - essn, dependent_name, sex, bdate, relationship
+
+SELECT * FROM employee WHERE dno=5 AND sex="M";
+SELECT * FROM employee WHERE dno=5 OR sex="M";
+SELECT fname AS "First Name", lname AS "Last Name", ssn, salary, sex FROM employee WHERE salary<=45000 AND sex="M";
+SELECT * FROM works_on where hours>15;
+SELECT essn, relationship FROM dependent WHERE relationship="Daughter";
+SELECT pname AS Project_Name, pnumber AS Project_Number, plocation FROM project WHERE pnumber>10;
+SELECT * FROM employee WHERE fname LIKE "a%";
+SELECT * FROM employee WHERE fname LIKE "%a";
+SELECT * FROM employee WHERE fname LIKE "%a%" OR dno = 5;
+SELECT * FROM employee WHERE dno!=5;
+SELECT * FROM employee WHERE dno<>5;
+SELECT * FROM employee WHERE NOT dno=5;
+SELECT fname, lname, ssn, sex, dno FROM employee WHERE NOT sex="F" AND dno IN (1,4);
+SELECT fname, lname, ssn, sex, dno FROM employee WHERE sex!="F" AND (dno=1 OR dno=4);
+SELECT * FROM employee WHERE salary>=30000 AND salary<=40000;
+SELECT * FROM employee WHERE salary BETWEEN 30000 AND 40000;
+SELECT * FROM employee WHERE dno IN (1,4,5);
+SELECT * FROM employee WHERE dno NOT IN (1,5);
+SELECT * FROM works_on WHERE hours>=10 AND pno BETWEEN 3 AND 10;
+SELECT * FROM dept_locations WHERE dlocation LIKE "%s%";
+
+# employee - fname, minit, lname, ssn,bdate, address, sex,salary, super_ssn, dno
+# department - dname, dnumber, mgr_ssn, mgr_start_date
+# dept_locations - dnumber, dlocation
+# works_on - essn, pno, hours
+# project - pname, pnumber, plocation, dnum
+# dependent - essn, dependent_name, sex, bdate, relationship
+
+SELECT * FROM dependent WHERE sex="M" OR relationship IN ("son", "spouse");
+SELECT * FROM employee WHERE super_ssn IS NULL;
+SELECT * FROM works_on WHERE hours IS NULL;
+SELECT * FROM employee ORDER BY salary ASC;
+SELECT * FROM employee WHERE salary>30000 AND dno IN (1,4) ORDER BY salary ASC;
+SELECT pno, hours FROM works_on WHERE hours IS NOT NULL AND pno<5 ORDER BY hours DESC;
+SELECT COUNT(*) AS Total_Rows FROM employee;
+SELECT COUNT(*) AS Total_Rows FROM dependent;
+SELECT DISTINCT dname FROM department;
+
+
+
+
+
+
+
+
+
+
