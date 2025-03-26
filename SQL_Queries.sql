@@ -144,14 +144,6 @@ SELECT * FROM employee WHERE dno IN (1,4,5);
 SELECT * FROM employee WHERE dno NOT IN (1,5);
 SELECT * FROM works_on WHERE hours>=10 AND pno BETWEEN 3 AND 10;
 SELECT * FROM dept_locations WHERE dlocation LIKE "%s%";
-
-# employee - fname, minit, lname, ssn,bdate, address, sex,salary, super_ssn, dno
-# department - dname, dnumber, mgr_ssn, mgr_start_date
-# dept_locations - dnumber, dlocation
-# works_on - essn, pno, hours
-# project - pname, pnumber, plocation, dnum
-# dependent - essn, dependent_name, sex, bdate, relationship
-
 SELECT * FROM dependent WHERE sex="M" OR relationship IN ("son", "spouse");
 SELECT * FROM employee WHERE super_ssn IS NULL;
 SELECT * FROM works_on WHERE hours IS NULL;
@@ -161,6 +153,60 @@ SELECT pno, hours FROM works_on WHERE hours IS NOT NULL AND pno<5 ORDER BY hours
 SELECT COUNT(*) AS Total_Rows FROM employee;
 SELECT COUNT(*) AS Total_Rows FROM dependent;
 SELECT DISTINCT dname FROM department;
+SELECT DISTINCT relationship FROM dependent;
+SELECT DISTINCT pno FROM works_on;
+SELECT DISTINCT dno FROM employee;
+SELECT MIN(salary) AS Mininum_Salary, MAX(salary) AS Maximum_Salary FROM employee;
+SELECT MIN(hours) AS Minimum_Hours, MAX(hours) AS Maximum_Hours FROM works_on;
+SELECT MIN(salary) AS Minimum_Salary FROM employee WHERE dno=5;
+SELECT dno, MIN(salary) FROM employee GROUP BY dno;
+SELECT dno, COUNT(*) FROM employee GROUP BY dno;
+SELECT COUNT(*) AS Employee_Count FROM employee WHERE salary>35000;
+SELECT relationship, COUNT(*) AS Number_of_Employees FROM dependent GROUP BY relationship;
+SELECT pno AS Project_Number, SUM(hours) AS Total_Project_Hours FROM works_on GROUP BY pno;
+SELECT dno, sex, SUM(salary) AS Total_Salary FROM employee GROUP BY dno, sex;
+SELECT sex, AVG(salary) AS Average_Salary FROM employee GROUP BY sex;
+SELECT dno, COUNT(*) AS Total_Employees, SUM(salary) AS Total_Salary FROM employee GROUP BY dno;
+SELECT dno, COUNT(*) AS Total_Employees, SUM(salary) AS Total_Salary FROM employee GROUP BY dno HAVING Total_Employees>=2;
+SELECT dno, COUNT(*) AS Total_Employees, SUM(salary) AS Total_Salary FROM employee WHERE sex="M" GROUP BY dno HAVING COUNT(*)>=2;
+SELECT dno, AVG(salary) AS Average_Salary FROM employee WHERE sex="M" GROUP BY dno HAVING Average_Salary>35000 ORDER BY Average_Salary ASC;
+SELECT *, CASE WHEN sex="M" THEN "Male" WHEN sex="F" THEN "Female" END AS Gender FROM employee;
+SELECT *, CASE WHEN salary<30000 THEN "Min Salary" WHEN salary BETWEEN 30000 AND 40000 THEN "Mid Salary" WHEN salary>40000 THEN "Max Salary" END AS Salary_Bucket FROM employee;
+SELECT *, CASE WHEN sex="M" THEN salary END AS Male_Salary, CASE WHEN sex="F" THEN salary END AS Female_Salary FROM employee;
+SELECT dno, AVG(salary) AS Avg_Salary, AVG(CASE WHEN sex="M" THEN salary END) AS Male_Salary_Avg, AVG(CASE WHEN sex="F" THEN salary END) AS Female_Salary_Avg FROM employee GROUP BY dno;
+SELECT *, CASE WHEN salary<30000 THEN "<30k" WHEN salary BETWEEN 30000 AND 40000 THEN "30k - 40k" ELSE ">40k" END AS Salary_Bucket FROM employee;
+SELECT essn, COUNT(CASE WHEN relationship="Daughter" THEN 1 END) AS Count_of_Daughters, 
+			 COUNT(CASE WHEN relationship="Son" THEN 1 END) AS Count_of_Sons, 
+             COUNT(CASE WHEN relationship="Spouse" THEN 1 END) AS Count_of_Spouse FROM dependent GROUP BY essn;
+
+# employee - fname, minit, lname, ssn,bdate, address, sex,salary, super_ssn, dno
+# department - dname, dnumber, mgr_ssn, mgr_start_date
+# dept_locations - dnumber, dlocation
+# works_on - essn, pno, hours
+# project - pname, pnumber, plocation, dnum
+# dependent - essn, dependent_name, sex, bdate, relationship
+
+SELECT fname, lname, salary, LAG(salary) OVER(ORDER BY salary ASC) AS Lag_Salary FROM employee;
+SELECT fname, lname, salary, LAG(fname) OVER(ORDER BY fname ASC) FROM employee;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
