@@ -178,6 +178,27 @@ SELECT *, CASE WHEN salary<30000 THEN "<30k" WHEN salary BETWEEN 30000 AND 40000
 SELECT essn, COUNT(CASE WHEN relationship="Daughter" THEN 1 END) AS Count_of_Daughters, 
 			 COUNT(CASE WHEN relationship="Son" THEN 1 END) AS Count_of_Sons, 
              COUNT(CASE WHEN relationship="Spouse" THEN 1 END) AS Count_of_Spouse FROM dependent GROUP BY essn;
+SELECT fname, lname, salary, LAG(salary) OVER(ORDER BY salary ASC) AS Lag_Salary FROM employee;
+SELECT fname, lname, salary, LAG(fname) OVER(ORDER BY fname ASC) FROM employee;
+SELECT fname, lname, salary, LAG(salary) OVER(ORDER BY salary ASC) AS Lag_Salary, LAG(fname) OVER(ORDER BY salary ASC) AS Lag_fname FROM employee;
+SELECT fname, lname, salary, LAG(salary) OVER(ORDER BY fname ASC) AS Lag_Salary, LAG(fname) OVER(ORDER BY fname ASC) AS Lag_fname FROM employee;
+SELECT fname, lname, salary, LAG(salary) OVER(ORDER BY salary ASC) as Lag_Salary, LEAD(salary) OVER(ORDER BY salary ASC) AS Lead_Salary FROM employee;
+SELECT fname, lname, salary, LAG(salary, 2) OVER(ORDER BY salary DESC) AS Lag_Salary FROM employee;
+SELECT fname, lname, salary, LEAD(salary,4) OVER(ORDER BY salary DESC) AS Lead_Salary FROM employee;
+SELECT fname, lname, salary, ROW_NUMBER() OVER(ORDER BY fname ASC) as Row_Num FROM employee;
+SELECT fname, lname, salary, ROW_NUMBER() OVER(ORDER BY salary ASC) as Row_Num FROM employee;
+SELECT fname, lname, salary, RANK() OVER(ORDER BY salary ASC) AS Salary_Rank FROM employee;
+SELECT fname, lname, salary, DENSE_RANK() OVER(ORDER BY salary ASC) AS Salary_Dense_Rank FROM employee;
+SELECT dno, fname, lname, salary, RANK() OVER(PARTITION BY dno ORDER BY salary DESC) AS Salary_Rank FROM employee;
+SELECT *, RANK() OVER(ORDER BY hours DESC) AS Rank_by_Hours FROM works_on;
+SELECT *, RANK() OVER(PARTITION BY pno ORDER BY hours DESC) AS Hours_Rank FROM employee;
+SELECT * FROM employee E JOIN department D ON E.dno=D.dnumber;
+SELECT fname F, lname L, salary FROM employee;
+SELECT fname AS F, lname AS L, salary FROM employee;
+SELECT E.*, D.dname FROM employee AS E JOIN department AS D ON E.dno=D.dnumber;
+SELECT W.essn, E.fname, E.lname, W.pno, W.hours FROM works_on AS W LEFT JOIN employee AS E ON W.essn=E.ssn;
+SELECT P.*, D.mgr_ssn AS Dept_Manager_ID FROM project AS P LEFT JOIN department AS D ON P.dnum=D.dnumber;
+SELECT P.*, D.mgr_ssn, E.fname, E.lname FROM project AS P LEFT JOIN department AS D ON P.dnum=D.dnumber LEFT JOIN employee AS E ON D.mgr_ssn=E.ssn;
 
 # employee - fname, minit, lname, ssn,bdate, address, sex,salary, super_ssn, dno
 # department - dname, dnumber, mgr_ssn, mgr_start_date
@@ -186,14 +207,8 @@ SELECT essn, COUNT(CASE WHEN relationship="Daughter" THEN 1 END) AS Count_of_Dau
 # project - pname, pnumber, plocation, dnum
 # dependent - essn, dependent_name, sex, bdate, relationship
 
-SELECT fname, lname, salary, LAG(salary) OVER(ORDER BY salary ASC) AS Lag_Salary FROM employee;
-SELECT fname, lname, salary, LAG(fname) OVER(ORDER BY fname ASC) FROM employee;
-
-
-
-
-
-
+SELECT E.fname, E.lname, W.essn,     W.hours 				 FROM employee AS E LEFT JOIN works_on AS W ON E.ssn=W.essn;
+SELECT E.fname, E.lname, W.essn, SUM(W.hours) AS Total_Hours FROM employee AS E LEFT JOIN works_on AS W ON E.ssn=W.essn GROUP BY E.fname, E.lname, W.essn;
 
 
 
