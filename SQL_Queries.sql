@@ -199,6 +199,28 @@ SELECT E.*, D.dname FROM employee AS E JOIN department AS D ON E.dno=D.dnumber;
 SELECT W.essn, E.fname, E.lname, W.pno, W.hours FROM works_on AS W LEFT JOIN employee AS E ON W.essn=E.ssn;
 SELECT P.*, D.mgr_ssn AS Dept_Manager_ID FROM project AS P LEFT JOIN department AS D ON P.dnum=D.dnumber;
 SELECT P.*, D.mgr_ssn, E.fname, E.lname FROM project AS P LEFT JOIN department AS D ON P.dnum=D.dnumber LEFT JOIN employee AS E ON D.mgr_ssn=E.ssn;
+SELECT E.fname, E.lname, W.essn,     W.hours 				 FROM employee AS E LEFT JOIN works_on AS W ON E.ssn=W.essn;
+SELECT E.fname, E.lname, W.essn, SUM(W.hours) AS Total_Hours FROM employee AS E LEFT JOIN works_on AS W ON E.ssn=W.essn GROUP BY E.fname, E.lname, W.essn;
+SELECT E.fname, E.lname, W.essn, SUM(W.hours) AS Total_Hours FROM employee AS E LEFT JOIN works_on AS W ON E.ssn=W.essn GROUP BY 1,2,3 ORDER BY Total_Hours DESC;
+SELECT E.fname, E.lname, E.ssn, COUNT(D.relationship) AS Num_of_Dependents FROM employee AS E LEFT JOIN dependent AS D ON E.ssn=D.essn GROUP BY 1,2,3;
+SELECT E.ssn, COUNT(D.relationship) AS Num_Dependents FROM employee AS E RIGHT JOIN dependent AS D ON E.ssn=D.essn GROUP BY E.ssn;
+SELECT E.ssn, COUNT(D.relationship) AS Num_Dependents, SUM(W.hours) AS Total_Hours FROM employee AS E LEFT JOIN dependent AS D ON E.ssn=D.essn LEFT JOIN works_on AS W ON E.ssn=W.essn GROUP BY 1;
+WITH new_table AS (SELECT E.ssn, COUNT(D.relationship) AS Num_Dependents FROM employee AS E RIGHT JOIN dependent AS D ON E.ssn=D.essn GROUP BY E.ssn)
+	SELECT * FROM new_table WHERE Num_Dependents>0;
+WITH new_table_1 AS (SELECT E.ssn AS emp_id, COUNT(D.relationship) AS Num_Dependents FROM employee AS E LEFT JOIN dependent AS D ON E.ssn=D.essn GROUP BY E.ssn),
+	 new_table_2 AS (SELECT N.emp_id, N.Num_Dependents, SUM(W.hours) AS Sum_Hours FROM new_table_1 AS N JOIN works_on AS W ON N.emp_id=W.essn GROUP BY 1,2)
+     SELECT *, DENSE_RANK() OVER(ORDER BY N2.Sum_Hours DESC) FROM new_table_2 AS N2;
+WITH new_table_1 AS (SELECT E.ssn AS emp_id, COUNT(D.relationship) AS Num_Dependents FROM employee AS E LEFT JOIN dependent AS D ON E.ssn=D.essn GROUP BY E.ssn),
+	 new_table_2 AS (SELECT N1.emp_id, N1.Num_Dependents, SUM(W.hours) AS Sum_Hours FROM new_table_1 AS N1 JOIN works_on AS W ON N1.emp_id=W.essn GROUP BY 1,2),
+     new_table_3 AS (SELECT *, DENSE_RANK() OVER(ORDER BY N2.Sum_Hours DESC) AS Hours_Rank FROM new_table_2 AS N2)
+     SELECT * FROM new_table_3 AS N3 WHERE Hours_Rank>=2;
+SELECT X.emp_id, X.Num_Dependents, SUM(W.hours) AS Total_Hours FROM
+	(SELECT E.ssn AS emp_id, COUNT(D.relationship) AS Num_Dependents FROM employee AS E JOIN dependent AS D ON E.ssn=D.essn GROUP BY E.ssn) AS X 
+    JOIN works_on AS W ON X.emp_id=W.essn GROUP BY 1,2;
+SELECT * FROM (SELECT *, DENSE_RANK() OVER(ORDER BY Y.Total_Hours DESC) AS Hours_Rank FROM 
+	(SELECT X.emp_id, X.Num_Dependents, SUM(W.hours) AS Total_Hours FROM
+	(SELECT E.ssn AS emp_id, COUNT(D.relationship) AS Num_Dependents FROM employee AS E LEFT JOIN dependent AS D ON E.ssn=D.essn GROUP BY E.ssn) AS X 
+    JOIN works_on AS W ON X.emp_id=W.essn GROUP BY 1,2) AS Y) AS Z WHERE Z.Hours_Rank<=2;
 
 # employee - fname, minit, lname, ssn,bdate, address, sex,salary, super_ssn, dno
 # department - dname, dnumber, mgr_ssn, mgr_start_date
@@ -207,25 +229,7 @@ SELECT P.*, D.mgr_ssn, E.fname, E.lname FROM project AS P LEFT JOIN department A
 # project - pname, pnumber, plocation, dnum
 # dependent - essn, dependent_name, sex, bdate, relationship
 
-SELECT E.fname, E.lname, W.essn,     W.hours 				 FROM employee AS E LEFT JOIN works_on AS W ON E.ssn=W.essn;
-SELECT E.fname, E.lname, W.essn, SUM(W.hours) AS Total_Hours FROM employee AS E LEFT JOIN works_on AS W ON E.ssn=W.essn GROUP BY E.fname, E.lname, W.essn;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+SELECT D.dname, AVG(E.salary) AS Average_Salary FROM department AS D LEFT JOIN employee AS E ON D.dnumber=E.dno GROUP BY D.dnumber;
 
 
 
