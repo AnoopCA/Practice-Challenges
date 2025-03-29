@@ -222,6 +222,7 @@ SELECT * FROM (SELECT *, DENSE_RANK() OVER(ORDER BY Y.Total_Hours DESC) AS Hours
 	(SELECT E.ssn AS emp_id, COUNT(D.relationship) AS Num_Dependents FROM employee AS E LEFT JOIN dependent AS D ON E.ssn=D.essn GROUP BY E.ssn) AS X 
     JOIN works_on AS W ON X.emp_id=W.essn GROUP BY 1,2) AS Y) AS Z WHERE Z.Hours_Rank<=2;
 
+use company_db;
 # employee - fname, minit, lname, ssn,bdate, address, sex,salary, super_ssn, dno
 # department - dname, dnumber, mgr_ssn, mgr_start_date
 # dept_locations - dnumber, dlocation
@@ -230,6 +231,18 @@ SELECT * FROM (SELECT *, DENSE_RANK() OVER(ORDER BY Y.Total_Hours DESC) AS Hours
 # dependent - essn, dependent_name, sex, bdate, relationship
 
 SELECT D.dname, AVG(E.salary) AS Average_Salary FROM department AS D LEFT JOIN employee AS E ON D.dnumber=E.dno GROUP BY D.dnumber;
+SELECT X.ssn, X.fname, X.lname, X.dno, Y.Dept_Avg_Salary FROM
+	(SELECT ssn, fname, lname, dno FROM employee) AS X
+	LEFT JOIN (SELECT dno, AVG(salary) AS Dept_Avg_Salary FROM employee GROUP BY dno) AS Y ON X.dno=Y.dno;
+
+SELECT Z.ssn, Z.fname, Z.lname, Z.dno, Z.avg_salary, Z.super_ssn, E.salary FROM
+	(SELECT X.ssn, X.fname AS fname, X.lname AS lname, X.dno AS dno, X.super_ssn AS super_ssn, Y.Avg_Salary AS avg_salary FROM
+	(SELECT ssn, fname, lname, dno, super_ssn FROM employee) AS X
+    LEFT JOIN (SELECT dno, AVG(salary) AS Avg_Salary FROM employee GROUP BY dno) AS Y ON X.dno=Y.dno) AS Z
+    LEFT JOIN employee AS E ON Z.super_ssn=E.ssn ORDER BY Z.super_ssn;
+
+
+
 
 
 
