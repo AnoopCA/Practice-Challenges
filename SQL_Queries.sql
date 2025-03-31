@@ -206,7 +206,7 @@ SELECT E.fname, E.lname, E.ssn, COUNT(D.relationship) AS Num_of_Dependents FROM 
 SELECT E.ssn, COUNT(D.relationship) AS Num_Dependents FROM employee AS E RIGHT JOIN dependent AS D ON E.ssn=D.essn GROUP BY E.ssn;
 SELECT E.ssn, COUNT(D.relationship) AS Num_Dependents, SUM(W.hours) AS Total_Hours FROM employee AS E LEFT JOIN dependent AS D ON E.ssn=D.essn LEFT JOIN works_on AS W ON E.ssn=W.essn GROUP BY 1;
 WITH new_table AS (SELECT E.ssn, COUNT(D.relationship) AS Num_Dependents FROM employee AS E RIGHT JOIN dependent AS D ON E.ssn=D.essn GROUP BY E.ssn)
-	SELECT * FROM new_table WHERE Num_Dependents>0;
+	SELECT * FROM new_table WHERE Num_Dependents>0; # Common Table Expression - CTE, temporary table is created using "WITH" keyword
 WITH new_table_1 AS (SELECT E.ssn AS emp_id, COUNT(D.relationship) AS Num_Dependents FROM employee AS E LEFT JOIN dependent AS D ON E.ssn=D.essn GROUP BY E.ssn),
 	 new_table_2 AS (SELECT N.emp_id, N.Num_Dependents, SUM(W.hours) AS Sum_Hours FROM new_table_1 AS N JOIN works_on AS W ON N.emp_id=W.essn GROUP BY 1,2)
      SELECT *, DENSE_RANK() OVER(ORDER BY N2.Sum_Hours DESC) FROM new_table_2 AS N2;
@@ -221,6 +221,35 @@ SELECT * FROM (SELECT *, DENSE_RANK() OVER(ORDER BY Y.Total_Hours DESC) AS Hours
 	(SELECT X.emp_id, X.Num_Dependents, SUM(W.hours) AS Total_Hours FROM
 	(SELECT E.ssn AS emp_id, COUNT(D.relationship) AS Num_Dependents FROM employee AS E LEFT JOIN dependent AS D ON E.ssn=D.essn GROUP BY E.ssn) AS X 
     JOIN works_on AS W ON X.emp_id=W.essn GROUP BY 1,2) AS Y) AS Z WHERE Z.Hours_Rank<=2;
+SELECT D.dname, AVG(E.salary) AS Average_Salary FROM department AS D LEFT JOIN employee AS E ON D.dnumber=E.dno GROUP BY D.dnumber;
+SELECT X.ssn, X.fname, X.lname, X.dno, Y.Dept_Avg_Salary FROM
+	(SELECT ssn, fname, lname, dno FROM employee) AS X
+	LEFT JOIN (SELECT dno, AVG(salary) AS Dept_Avg_Salary FROM employee GROUP BY dno) AS Y ON X.dno=Y.dno;
+SELECT Z.ssn, Z.fname, Z.lname, Z.dno, Z.avg_salary, Z.super_ssn, E.salary FROM
+	(SELECT X.ssn, X.fname AS fname, X.lname AS lname, X.dno AS dno, X.super_ssn AS super_ssn, Y.Avg_Salary AS avg_salary FROM
+	(SELECT ssn, fname, lname, dno, super_ssn FROM employee) AS X
+    LEFT JOIN (SELECT dno, AVG(salary) AS Avg_Salary FROM employee GROUP BY dno) AS Y ON X.dno=Y.dno) AS Z
+    LEFT JOIN employee AS E ON Z.super_ssn=E.ssn ORDER BY Z.super_ssn;
+SELECT A.fname, A.lname, A.salary, A.ssn, A.dno, A.super_ssn, E.salary FROM
+	(SELECT fname, lname, salary, ssn, dno, super_ssn FROM employee) AS A LEFT JOIN employee E ON A.super_ssn=E.ssn ORDER BY A.super_ssn ASC;
+ALTER TABLE employee CHANGE first_name fname VARCHAR(30);
+ALTER TABLE employee CHANGE lname last_name VARCHAR(25);
+SET SQL_SAFE_UPDATES = 0;
+UPDATE employee SET salary=salary*1.1;
+UPDATE employee SET salary=salary*0.9 WHERE dno=5;
+ALTER TABLE employee ADD bonus INT;
+UPDATE employee SET bonus=salary*0.15;
+ALTER TABLE employee DROP COLUMN bonus;
+ALTER TABLE employee MODIFY first_name VARCHAR(40);
+DESCRIBE TABLE employee;
+ALTER TABLE employee RENAME TO employee_temp;
+ALTER TABLE employee_temp RENAME TO employee;
+SELECT ssn, fname, bdate, CURRENT_DATE() as todays_date FROM employee;
+SELECT ssn, fname, bdate, CURRENT_TIME() as currenttime FROM employee;
+SELECT ssn, fname, bdate, CURRENT_TIMESTAMP() as currenttimestamp FROM employee;
+SELECT ssn, fname, bdate, ROUND(DATEDIFF(CURRENT_DATE, bdate)/365.25,0) AS age FROM employee;
+SELECT ssn, fname, bdate, YEAR(bdate) AS birthyear, MONTH(bdate) AS birthmonth, DAY(bdate) AS birthday FROM employee;
+SELECT ssn, fname, lname, salary FROM employee WHERE ssn IN (SELECT DISTINCT essn FROM dependent); - # Sub query, takes more memory than JOIN
 
 use company_db;
 # employee - fname, minit, lname, ssn,bdate, address, sex,salary, super_ssn, dno
@@ -230,16 +259,12 @@ use company_db;
 # project - pname, pnumber, plocation, dnum
 # dependent - essn, dependent_name, sex, bdate, relationship
 
-SELECT D.dname, AVG(E.salary) AS Average_Salary FROM department AS D LEFT JOIN employee AS E ON D.dnumber=E.dno GROUP BY D.dnumber;
-SELECT X.ssn, X.fname, X.lname, X.dno, Y.Dept_Avg_Salary FROM
-	(SELECT ssn, fname, lname, dno FROM employee) AS X
-	LEFT JOIN (SELECT dno, AVG(salary) AS Dept_Avg_Salary FROM employee GROUP BY dno) AS Y ON X.dno=Y.dno;
 
-SELECT Z.ssn, Z.fname, Z.lname, Z.dno, Z.avg_salary, Z.super_ssn, E.salary FROM
-	(SELECT X.ssn, X.fname AS fname, X.lname AS lname, X.dno AS dno, X.super_ssn AS super_ssn, Y.Avg_Salary AS avg_salary FROM
-	(SELECT ssn, fname, lname, dno, super_ssn FROM employee) AS X
-    LEFT JOIN (SELECT dno, AVG(salary) AS Avg_Salary FROM employee GROUP BY dno) AS Y ON X.dno=Y.dno) AS Z
-    LEFT JOIN employee AS E ON Z.super_ssn=E.ssn ORDER BY Z.super_ssn;
+
+
+
+
+
 
 
 
