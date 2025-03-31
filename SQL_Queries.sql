@@ -260,7 +260,39 @@ use company_db;
 # dependent - essn, dependent_name, sex, bdate, relationship
 
 
+# Stored Procedures (Delimiter set to "//" and hence ";" is not considred as the end of the procedure).
+DELIMITER //
+CREATE PROCEDURE pull_emp_data()
+BEGIN
+	SELECT * FROM employee ORDER BY salary;
+END //
+CALL pull_emp_data();
+DROP PROCEDURE IF EXISTS pull_emp_data;
 
+DELIMITER //
+CREATE PROCEDURE pull_emp(IN emp_id INT)
+BEGIN
+	SELECT * FROM employee WHERE ssn=emp_id;
+END//
+CALL pull_emp(123456789);
+
+DROP PROCEDURE IF EXISTS update_salary;
+DELIMITER //
+CREATE PROCEDURE update_salary(IN emp_id INT, IN new_salary FLOAT)
+BEGIN
+	UPDATE employee SET salary=new_salary WHERE ssn=emp_id;
+	SELECT * FROM employee WHERE ssn=emp_id;
+END//
+CALL update_salary(123456789, 17000);
+
+DROP PROCEDURE IF EXISTS get_salary;
+DELIMITER //
+CREATE PROCEDURE get_salary(IN emp_id INT, OUT emp_salary FLOAT)
+BEGIN
+	SELECT salary INTO emp_salary FROM employee WHERE ssn=emp_id;
+END //
+CALL get_salary(123456789, @emp_sal);
+SELECT @emp_sal AS emp_sal;
 
 
 
