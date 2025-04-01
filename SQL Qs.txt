@@ -1,0 +1,93 @@
+1.  What is SQL?
+    ○  Explain what SQL is and its importance in database management systems.
+        SQL is a declarative programming language used to manage and manipulate data in relational databases. It allows users to store, retrieve, update, and delete data efficiently. SQL is essential in database management because it ensures data integrity, security, and organization. It helps in creating database structures, controlling user access, and handling transactions to maintain accuracy.
+
+2.  Overview of MySQL and its Features:
+    ○  List and describe at least five key features of MySQL.
+        Open-Source – MySQL is freely available, making it cost-effective and widely used.
+        Relational Database Management System (RDBMS) – It organizes data into tables with relationships, ensuring structured and efficient data storage.
+        High Performance – MySQL is optimized for speed and handles large volumes of data efficiently, making it ideal for web applications.
+        Scalability – It supports scaling both vertically (adding resources to a single server) and horizontally (distributing data across multiple servers).
+        Cross-Platform Compatibility – MySQL runs on various operating systems, including Windows, Linux, and macOS, making it highly flexible.
+
+3.  Installing and Setting Up MySQL:
+    ○  Describe the steps to install and set up MySQL on your operating system.
+        Go to the website "dev.mysql.com/downloads" and click "MySQL Installer for Windows" in the "MySQL Community Downloads" section.
+        Download the "wINDOWS (X86, 32-BIT), MSI Installer". Click "No thanks, just start my download." option to continue downloading.
+        In the MySQL installer dialog box select "Custom" and click "Next.
+        Under "Available Products" select " "MySQL server 8.0.23 - X64", "MySQL Workbench 8.0.23 - X64" and "MySQL Shell 8.0.23 - X64" and click "Next".
+        Under "Check Requirements" tab, click "Execute". There will be a prompt displaying to install "Microsoft Visual C++". Check the option to agree terms and click "Install.
+        Under the "Download" tab click "Execute" option 3 times to install the products selected.
+        Click "Next" under the "Product Configuration" option.
+        Click "Next" with the default options selected in the section "Type and Networking".
+        Under the section "Authentication Method" check the option "Use Strong Password Encryption for Authentication (RECOMMENDED)" and then click "Next".
+        Provide a password and the section "Accounts and Roles" and the click "Next".
+        Click "Next" with the default options selected in the section "Windows Service".
+        Click "Next" with the default options selected in the section "Server File Permissions".
+        Click "Execute" under the section "Apply Configuration" and then click "Finish".
+        Click "Next" and then "Finish" in the following sections.
+        Then open Workbench to access MySQL.
+
+4.  Basic Concepts:
+    ○  Define the following database concepts: Table, Row, Column. 
+        Table: A table is like a spreadsheet or a grid where data is stored in rows and columns. It organizes related information in a structured way.
+        Row: A row is a single, horizontal line of data in a table. Each row represents a unique record or entry in the table.
+        Column: A column is a vertical section in a table that holds a specific type of data, such as names, dates, or prices. Each column is labeled with a heading that describes the data it contains.
+
+5.  Create Database: 
+    ○  Write a SQL query to create a new database named CompanyDB.  
+
+6.  Create Table: 
+    ○  Write a SQL query to create a table named Employees with the following columns:
+       EmployeeID (INT, Primary Key), FirstName (VARCHAR(50)), LastName (VARCHAR(50)), Department (VARCHAR(50)), Salary (DECIMAL(10, 2)). 
+ 
+7.  Insert Data: 
+    ○  Write a SQL query to insert the following data into the Employees table: 
+        EmployeeID  FirstName  LastName  Department  Salary 
+        1  John  Doe  HR  50000 
+        2  Jane  Smith  IT  60000 
+        3  Emily  Johnson  Marketing  55000 
+        4  Michael  Brown  IT  70000 
+        5  Linda  Davis  HR  48000 
+
+8.  Select Data: 
+    ○  Write a SQL query to select all columns from the Employees table.    
+
+9.  Select Specific Columns: 
+    ○  Write a SQL query to select only FirstName, LastName, and Department columns from the Employees table. 
+ 
+10. WHERE Clause: 
+    ○  Write a SQL query to select all employees who work in the IT department.  
+
+11. Using AND in WHERE Clause: 
+    ○  Write a SQL query to select employees who work in the IT department and have a salary greater than 60000.  
+
+12. Using OR in WHERE Clause: 
+    ○  Write a SQL query to select employees who work in the HR department or have a salary less than 50000. 
+ 
+13. ORDER BY Clause: 
+    ○  Write a SQL query to select all employees, ordered by LastName in ascending order.  
+
+14. UPDATE Command: 
+    ○  Write a SQL query to update the salary of Emily Johnson to 58000.  
+
+15. DELETE Command: 
+    ○  Write a SQL query to delete the employee record with EmployeeID equal to 5. 
+ 
+16. Aggregate Functions: 
+    ○  Write a SQL query to calculate the average salary of employees in the IT department.  
+
+17. GROUP BY Clause: 
+    ○  Write a SQL query to find the total salary expense for each department.  
+
+18. HAVING Clause: 
+    ○  Write a SQL query to select departments with a total salary expense greater than 100000.  
+
+19. JOIN Clause: 
+    ○  Create another table named Departments with the following columns: DepartmentID (INT, Primary Key), DepartmentName (VARCHAR(50)). 
+        Populate it with appropriate data, then write a SQL query to join the Employees and Departments tables and select all columns.  
+
+20. Subquery: 
+    ○  Write a SQL query to find the employee(s) with the highest salary.
+
+    
