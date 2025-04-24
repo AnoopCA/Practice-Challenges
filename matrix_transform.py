@@ -14,7 +14,7 @@ def transform_matrix(A, T, S):
         if T.shape[1] != A.shape[0] or A.shape[1] != S.shape[0]:
             return -1
 
-        # Try to compute the inverses
+        # Compute the inverses
         T_inv = np.linalg.inv(T)
         # Perform the transformation
         result = T_inv @ A @ S
