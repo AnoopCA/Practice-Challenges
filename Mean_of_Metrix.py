@@ -12,6 +12,7 @@ def mean_matrix(matrix, mode='row'):
         num_cols = len(matrix[0])
         if not all(len(row) == num_cols for row in matrix):
             raise ValueError("All rows must have the same number of columns")
+        # Calculate the mean of each column
         return [sum(matrix[i][j] for i in range(len(matrix))) / len(matrix) for j in range(num_cols)]
     
     # Raise an error if the mode is not recognized
