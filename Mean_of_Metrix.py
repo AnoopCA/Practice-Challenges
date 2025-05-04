@@ -10,6 +10,7 @@ def mean_matrix(matrix, mode='row'):
     # If mode is 'column', compute the mean of each column
     elif mode == 'column':
         num_cols = len(matrix[0])
+        # Ensure all rows have the same number of columns
         if not all(len(row) == num_cols for row in matrix):
             raise ValueError("All rows must have the same number of columns")
         # Calculate the mean of each column
