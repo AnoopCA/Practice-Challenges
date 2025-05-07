@@ -1,3 +1,4 @@
+# Function to compute the mean of each row or column in a 2D matrix
 def mean_matrix(matrix, mode='row'):
      #Validate that the matrix is a non-empty list of non-empty lists
     if not matrix or not all(isinstance(row, list) and row for row in matrix):
