@@ -1,19 +1,39 @@
 import sys
 import numpy as np
-import pandas as pd
+from sklearn.preprocessing import PolynomialFeatures
+from sklearn.linear_model import LinearRegression
+from sklearn.pipeline import make_pipeline
 
-lst = []
-for line in sys.stdin:
-    lst.append(line.strip().split())
+def read_input():
+    lines = sys.stdin.read().strip().split("\n")
+    f, n = map(int, lines[0].split())
 
-lst.pop(0)
-test = np.array(lst[-4:], dtype=float)
-train = np.array(lst[:-5], dtype=float)
+    data = []
+    for i in range(1, n+1):
+        data.append(list(map(float, lines[i].split())))
 
-train_df = pd.DataFrame(train, columns=['f1', 'f2', 'y'])
-test_df = pd.DataFrame(test, columns=['f1', 'f2'])
+    data = np.array(data)
+    x_train = data[:,:-1]
+    y_train = data[:,-1]
+    
+    t = int(lines[n+1])
+    x_test = []
+    for j in range(n+2, n+2+t):
+        x_test.append(list(map(float, lines[j].split())))
+        
+    x_test = np.array(x_test)
+    return x_train, y_train, x_test
 
-m1 = (train_df['f1']*train_df['y']).sum() / (train_df['f1']**2).sum()
-m2 = (train_df['f2']*train_df['y']).sum() / (train_df['f1']**2).sum()
+def main():
+    x_train, y_train, x_test = read_input()
+    
+    model = make_pipeline(PolynomialFeatures(degree=3), LinearRegression())
+    model.fit(x_train, y_train)
+    
+    pred = model.predict(x_test)
+    
+    for i in pred:
+        print(f"{i:.2f}")
 
-print(m1, '\n', m2)
+if __name__ == "__main__":
+    main()
