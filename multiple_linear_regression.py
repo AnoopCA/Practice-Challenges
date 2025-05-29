@@ -1,6 +1,6 @@
 import sys
 import numpy as np
-from sklearn.linear_model import Linear_Regression
+from sklearn.linear_model import LinearRegression
 
 in_data = sys.stdin.read().strip().split('\n')
 
@@ -9,14 +9,24 @@ for i in in_data:
     lst.append(list(map(float, i.split())))
 
 data = []
-for i in range(1, int(lst[0][1]) + 1):
+n = int(lst[0][1])
+for i in range(1, n + 1):
     data.append(lst[i])
 data = np.array(data)
 
 x_train = data[:,:-1]
 y_train = data[:,-1]
 
-for i in range(int(lst[0][1])+2, int(lst[0][1])+2+
+t = int(lst[n+1][0])
+x_test = []
+for i in range(n+2, n+2+t):
+    x_test.append(lst[i])
 
+x_test = np.array(x_test)
 
-print(x, '\n', y)
+lr = LinearRegression()
+lr.fit(x_train, y_train)
+pred = lr.predict(x_test)
+
+for i in pred:
+    print(round(i,2))
