@@ -1,21 +1,23 @@
 import sys
 
 def printTransactions(m, k, d, name, owned, prices):
-    result_list = []
+    actions = []
+
     for i in range(k):
-        if owned[i] == 0:
-            if int(prices[i][-1]) < m:
-                owned[i] = 1
-                result_list.append([name[i], 'BUY', owned[i]])
-                m = m - (owned[i] * prices[i][-1])
-            else:
-                owned[i] = 0
-                result_list.append([name[i], 'BUY', owned[i]])
-        else:
-            result_list.append([name[i], 'SELL', owned[i]])
-            m = m + (owned[i] * prices[i][-1])
-            owned[i] = 0
-    print(result_list)
+        current_price = prices[i][-1]
+        if owned[i] > 0 and current_price > prices[i][-2]:
+            actions.append(f"{name[i]} SELL {owned[i]}")
+            m = m + (current_price*owned[i])
+        elif owned[i] == 0 and current_price < prices[i][-2] and m >= current_price:
+            buy_amount = int(m // current_price)
+            if buy_amount > 0:
+                actions.append(f"{name[i]} BUY {buy_amount}")
+                m = m - (current_price*buy_amount)
+    print(len(actions))
+    for action in actions:
+        print(action)
+    
+    print(f'm: {m}')
 
 if __name__ == "__main__":
     data = sys.stdin.read().strip().split('\n')
