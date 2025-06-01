@@ -2,22 +2,20 @@ import sys
 
 def printTransactions(m, k, d, name, owned, prices):
     actions = []
-
     for i in range(k):
         current_price = prices[i][-1]
-        if owned[i] > 0 and current_price > prices[i][-2]:
+        if (owned[i] > 0) and (current_price > prices[i][-2]):
             actions.append(f"{name[i]} SELL {owned[i]}")
             m = m + (current_price*owned[i])
-        elif owned[i] == 0 and current_price < prices[i][-2] and m >= current_price:
-            buy_amount = int(m // current_price)
-            if buy_amount > 0:
-                actions.append(f"{name[i]} BUY {buy_amount}")
-                m = m - (current_price*buy_amount)
+        elif (owned[i] == 0) and (current_price < prices[i][-2]) and (m >= current_price):
+            buy_count = int(m // current_price)
+            if buy_count > 0:
+                actions.append(f"{name[i]} BUY {buy_count}")
+                m = m - (current_price*buy_count)
     print(len(actions))
     for action in actions:
         print(action)
-    
-    print(f'm: {m}')
+    #print(f'm: {m}')
 
 if __name__ == "__main__":
     data = sys.stdin.read().strip().split('\n')
