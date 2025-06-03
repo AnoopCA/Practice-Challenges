@@ -13,28 +13,32 @@ def printTransactions(m, k, d, name, owned, prices):
         denominator = sum((x[j]-mean_x)**2 for j in range(n))
         slope = numerator / denominator
         slopes.append(slope)
+    
+    min_slope = min(slopes)
+    max_slope = max(slopes)
+    slopes = [2 * (s - min_slope) / (max_slope - min_slope) - 1 for s in slopes]
+    
+    #print_slopes = []
+    #for i in range(len(slopes)):
+    #    print_slopes.append(f"{name[i]} {slopes[i]}")
+    #for s in print_slopes:
+    #    print(s)
+
+    for i in range(k):
         current_price = prices[i][-1]
-        if (owned[i] > 0) and (current_price > prices[i][-2]):
+        if (owned[i] > 0) and (slopes[i] < -0.5):
             actions.append(f"{name[i]} SELL {owned[i]}")
             m = m + (current_price*owned[i])
-        elif (owned[i] == 0) and (current_price < prices[i][-2]) and (m >= current_price):
+        elif (owned[i] == 0) and (slopes[i] > 0.5) and (m >= current_price):
             buy_count = int(m // current_price)
             if buy_count > 0:
                 actions.append(f"{name[i]} BUY {buy_count}")
                 m = m - (current_price*buy_count)
-    #print(len(actions))
-    #for action in actions:
-    #    print(action)
+        
+    print(len(actions))
+    for action in actions:
+        print(action)
     #print(f'm: {m}')
-    min_slope = min(slopes)
-    max_slope = max(slopes)
-    slopes = [2 * (s - min_slope) / (max_slope - min_slope) - 1 for s in slopes]
-    print_slopes = []
-    for i in range(len(slopes)):
-        print_slopes.append(f"{name[i]} {slopes[i]}")
-    
-    for s in print_slopes:
-        print(s)
     
 if __name__ == "__main__":
     data = sys.stdin.read().strip().split('\n')
