@@ -1,47 +1,26 @@
 import sys
-from math import sqrt
 from heapq import heappush, heappop
 
-def mean(nums):
-    return sum(nums) / len(nums)
-    
-def sd(nums):
-    average = mean(nums)
-    return sqrt(sum([(x - average) ** 2 for x in nums]) / len(nums))
-
-def info(price):
-    cc, sigma, acc = 0, 0.0, 0
-    for i in range(1, 5): 
-        if price[i] > price[i - 1]: cc += 1
-    sigma = sd(price)
-    mu = mean(price)
-    c1, c2, c3 = mean(price[0:3]), mean(price[1:4]), mean(price[2:5])
-
-    return (price[-1] - price[-2]) / price[-2]
-
-def printTransactions(money, k, d, name, owned, prices):
-    infos = map(info, prices)
-    res = []
-
+def printTransactions(m, k, d, name, owned, prices):
+    actions = []
     drop = []
-
     for i in range(k):
-        cur_info = info(prices[i])
-        if cur_info > 0 and owned[i] > 0:
-            res.append((name[i], 'SELL', str(owned[i])))
-        elif cur_info < 0:
-            heappush(drop, (cur_info, i, name[i]))
+        price_move = (prices[i][-1] - prices[i][-2]) / prices[i][-2]
+        if price_move > 0 and owned[i] > 0:
+            actions.append(f"{name[i]} SELL {owned[i]}")
+        elif price_move < 0:
+            heappush(drop, (price_move, i, name[i]))
 
-    while money > 0.0 and drop:
-        rate, idx, n = heappop(drop)
-        amount = int(money / prices[idx][-1])
-        if amount  > 0:
-            res.append((n, 'BUY', str(amount)))
-            money -= amount * prices[idx][-1]
+    while m > 0.0 and drop:
+        rate, idx, name = heappop(drop)
+        buy_count = int(m / prices[idx][-1])
+        if buy_count  > 0:
+            actions.append(f"{name} BUY {buy_count}")
+            m -= buy_count * prices[idx][-1]
 
-    print(len(res))
-    for r in res:
-        print(' '.join(r))
+    print(len(actions))
+    for action in actions:
+        print(action)
 
 if __name__ == '__main__':
     data = sys.stdin.read().strip().split('\n')
