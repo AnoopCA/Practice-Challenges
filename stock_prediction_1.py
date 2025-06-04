@@ -1,4 +1,6 @@
 import sys
+import json
+import os
 
 def printTransactions(m, k, d, name, owned, prices):
     actions = []
@@ -20,9 +22,9 @@ def printTransactions(m, k, d, name, owned, prices):
 
     for i in range(k):
         current_price = prices[i][-1]
-        if (owned[i] > 0) and (slopes[i] < -0.25) and (current_price>prices[i][-2]):
+        if (owned[i] > 0) and (slopes[i] < -0.01): # and (current_price>prices[i][-2]):
             actions.append(f"{name[i]} SELL {owned[i]}")
-        elif (owned[i] == 0) and (slopes[i] > 0.25) and (m >= current_price) and (current_price<prices[i][-2]):
+        elif (owned[i] == 0) and (slopes[i] > 0.01) and (m >= current_price): # and (current_price<prices[i][-2]):
             buy_count = int(m // current_price)
             if buy_count > 0:
                 actions.append(f"{name[i]} BUY {buy_count}")
@@ -31,7 +33,7 @@ def printTransactions(m, k, d, name, owned, prices):
     print(len(actions))
     for action in actions:
         print(action)
-    
+
 if __name__ == "__main__":
     data = sys.stdin.read().strip().split('\n')
     lst = []
@@ -49,4 +51,16 @@ if __name__ == "__main__":
         owned.append(int(lst[i][1]))
         prices.append(list(map(float, lst[i][2:])))
     
+    file_path = 'stock_prices_history.json'
+    if os.path.exists(file_path):
+        with open(file_path, 'r') as f:
+            content = f.read().strip()
+        if content:
+            price_history = json.loads(content)
+            for i in range(len(price_history)):
+                price_history[i].append(prices[i][-1])
+            prices = price_history.copy()
+    with open(file_path, 'w') as f:
+        json.dump(prices, f)
+
     printTransactions(m, k, d, name, owned, prices)
