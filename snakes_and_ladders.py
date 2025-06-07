@@ -10,16 +10,15 @@ def print_plays(dies_probs, ladder_squares, snake_squares):
         n += 1
         if (square + dies_roll) <= 100:
             square += dies_roll
-        if square in [key for key,value in ladder_squares.items()]:
-            if (square + ladder_squares[square]) <= 100:
-                square = ladder_squares[square]
-        if square in [key for key,value in snake_squares.items()]:
-            if (square - snake_squares[square]) > 0:
-                square = snake_squares[square]
-        if square == 100:
-            break
-
-    print(n)
+            while (square in ladder_squares) or (square in snake_squares):
+                if square in ladder_squares:
+                    square = ladder_squares[square]
+                if square in snake_squares:
+                    square = snake_squares[square]
+            if n == 1000:
+                return 0
+            if square == 100:
+                return n
 
 if __name__ == "__main__":
     data = sys.stdin.read().strip().split('\n')
@@ -28,14 +27,15 @@ if __name__ == "__main__":
     for i in range(t):
         dies_probs = list(map(float, list(data[1+rpt].split(','))))
         ladder_squares = {}
-        for i in data[3+rpt].split():
-            ldr = list(map(int, i.split(',')))
+        for j in data[3+rpt].split():
+            ldr = list(map(int, j.split(',')))
             ladder_squares[ldr[0]] = ldr[1]
         snake_squares = {}
-        for i in data[4+rpt].split():
-            snk = list(map(int, i.split(',')))
+        for k in data[4+rpt].split():
+            snk = list(map(int, k.split(',')))
             snake_squares[snk[0]] = snk[1]
         rpt += 4
-    
-        print_plays(dies_probs, ladder_squares, snake_squares)
-    
+        runs = []
+        for _ in range(5000):
+            runs.append(print_plays(dies_probs, ladder_squares, snake_squares))
+        print(int(sum(runs)/len(runs)))
