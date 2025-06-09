@@ -7,12 +7,41 @@ from sklearn.model_selection import GridSearchCV
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 
+import nltk
+from nltk.corpus import words
+from nltk.tokenize import word_tokenize
+import string
+import re
+import spacy
+
+# Download English word list and tokenizer
+nltk.download('words')
+nltk.download('punkt')
+nltk.download('punkt_tab')
+
 train = pd.read_csv('trainingdata.txt', header=None, names=['text'])
 train = train.iloc[1:].reset_index(drop=True)
 
 train['labels'] = train['text'].apply(lambda x: int(x[0]))
 train['text'] = train['text'].apply(lambda x: x[1:].strip())
 train['text'] = train['text'].apply(lambda x: str.lower(x))
+english_vocab = set(w.lower() for w in words.words())
+#nlp = spacy.load('en_core_web_sm')
+#english_vocab = set([w.lower_ for w in nlp.vocab if w.is_alpha])
+def extract_non_english(text):
+    tokens = word_tokenize(text.lower())
+    tokens = [re.sub(r'\W+', '', token) for token in tokens if token.isalpha()]
+    non_english = [word for word in tokens if word not in english_vocab]
+    return non_english
+non_english = []
+train['non_english'] = train['text'].apply(extract_non_english)
+non_eng = train['non_english'].to_list()
+unique_words = [j for i in non_eng for j in i]
+unique_words = set(unique_words)
+print(unique_words)
+print(len(unique_words))
+
+sys.exit()
 
 #train['text_len'] = train['text'].str.len()
 
@@ -33,6 +62,7 @@ CV_scores = search_out.cv_results_['mean_test_score']
 print(param_values)
 print(CV_scores)
 print(train['text'].tail())
+
 #nb_model.fit(X_train, y_train)
 #pred = nb_model.predict(X_test)
 #score = accuracy_score(y_test, pred)
