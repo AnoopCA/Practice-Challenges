@@ -1,4 +1,5 @@
 import sys
+import numpy as np
 import re
 import json
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -9,7 +10,10 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import f1_score
 
 def clean_text(text):
-    #text = re.sub(r'[^A-Za-z0-9\s]', '', text.strip())
+    text = re.sub(r'&[^ ]*?;', ' ', text)
+    text = re.sub(r'[^A-Za-z\s]', ' ', text)
+    text = text.strip()
+    text = re.sub(r'\s+', ' ', text)
     return text
 
 def preprocess(text):
@@ -17,13 +21,19 @@ def preprocess(text):
     for line in text:
         if line.strip():
             rows = json.loads(line)
-            cities.append(rows.get('city', '').strip())
+            cities.append(rows.get('city', '').replace('.en','').strip())
             sections.append(rows.get('section', '').strip())
-            headings.append(clean_text(rows.get('heading', '').lower()))
+            headings.append(rows.get('heading', '').lower())
+            #headings.append(clean_text(rows.get('heading', '').lower()))
             categories.append(rows.get('category', '').strip())
-    #print(headings[:1000])
+    #cities = [i.replace('.en','') for i in cities]
     print(set(cities))
-    print(set(sections))
+
+    for k in range(len(headings)):
+        #if ('&' in headings[k]) and (';' in headings[k]):
+        #print(f'{sections[k]} -:- {cities[k]} -:- {headings_clean[k]} -:- {categories[k]}')
+        pass
+    
     combined_text = [f'{s} {c} {h}' for c,s,h in zip(cities,sections,headings)]
     if all(x=='' for x in categories):
         return combined_text
