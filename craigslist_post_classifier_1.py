@@ -23,17 +23,10 @@ def preprocess(text):
             rows = json.loads(line)
             cities.append(rows.get('city', '').replace('.en','').strip())
             sections.append(rows.get('section', '').strip())
-            headings.append(rows.get('heading', '').lower())
-            #headings.append(clean_text(rows.get('heading', '').lower()))
+            headings.append(clean_text(rows.get('heading', '').lower()))
             categories.append(rows.get('category', '').strip())
-    #cities = [i.replace('.en','') for i in cities]
     print(set(cities))
 
-    for k in range(len(headings)):
-        #if ('&' in headings[k]) and (';' in headings[k]):
-        #print(f'{sections[k]} -:- {cities[k]} -:- {headings_clean[k]} -:- {categories[k]}')
-        pass
-    
     combined_text = [f'{s} {c} {h}' for c,s,h in zip(cities,sections,headings)]
     if all(x=='' for x in categories):
         return combined_text
@@ -45,15 +38,14 @@ def train():
         data = f.readlines()
     data = data[1:]
     combined_text, categories = preprocess(data)
-    #label_dict = {value:key for key,value in enumerate(set(categories))}
-    #labels = [label_dict[category] for category in categories]
-    #lr_svc_model = Pipeline([('vec', TfidfVectorizer()), ('svc', LinearSVC())])
-    #X_train,X_test,y_train,y_test = train_test_split(combined_text, labels, test_size=0.1)
-    #lr_svc_model.fit(X_train, y_train)
-    #lr_svc_pred = lr_svc_model.predict(X_test)
-    #print('F1 Score:')
-    #print(f'lr svc: {f1_score(y_test, lr_svc_pred, average="weighted")}')
-    #return nb_model, label_dict
+    label_dict = {value:key for key,value in enumerate(set(categories))}
+    labels = [label_dict[category] for category in categories]
+    lr_svc_model = Pipeline([('vec', TfidfVectorizer()), ('svc', LinearSVC())])
+    X_train,X_test,y_train,y_test = train_test_split(combined_text, labels, test_size=0.1)
+    lr_svc_model.fit(X_train, y_train)
+    lr_svc_pred = lr_svc_model.predict(X_test)
+    print(f'lr svc F1 score: {f1_score(y_test, lr_svc_pred, average="weighted")}')
+    #return lr_svc_model, label_dict
 
 if __name__ == "__main__":
     #in_data = sys.stdin.read().strip().split('\n')
