@@ -4,6 +4,7 @@ import json
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.pipeline import Pipeline
 from sklearn.svm import LinearSVC
+import pandas as pd
 
 def clean_text(text):
     text = re.sub(r'&[^ ]*?;', ' ', text)
@@ -21,6 +22,9 @@ def preprocess(text):
             sections.append(rows.get('section', '').strip())
             headings.append(clean_text(rows.get('heading', '').lower()))
             categories.append(rows.get('category', '').strip())
+    check_data = {'cities':cities, 'sections':sections, 'categories':categories}
+    check_data = pd.DataFrame(check_data)
+    print(check_data)
     combined_text = [f'{s} {c} {h}' for c,s,h in zip(cities,sections,headings)]
     if all(x=='' for x in categories):
         return combined_text
@@ -28,10 +32,7 @@ def preprocess(text):
         return combined_text, categories
 
 def train(combined_text, labels):
-    model = Pipeline([
-                        ('vec', TfidfVectorizer()),
-                        ('clf', LinearSVC())
-                    ])
+    model = Pipeline([('vec', TfidfVectorizer()), ('clf', LinearSVC())])
     model.fit(combined_text, labels)
     return model
 
