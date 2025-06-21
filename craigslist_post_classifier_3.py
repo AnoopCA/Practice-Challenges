@@ -1,10 +1,10 @@
 import sys
 import re
 import json
+import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.pipeline import Pipeline
 from sklearn.svm import LinearSVC
-import pandas as pd
 
 def clean_text(text):
     text = re.sub(r'&[^ ]*?;', ' ', text)
@@ -22,7 +22,6 @@ def preprocess(text):
             sections.append(rows.get('section', '').strip())
             headings.append(clean_text(rows.get('heading', '').lower()))
             categories.append(rows.get('category', '').strip())
-    #combined_text = [f'{s} {c} {h}' for c,s,h in zip(cities,sections,headings)]
     if all(x=='' for x in categories):
         df = {'sections':sections, 'cities':cities, 'headings':headings}
         df = pd.DataFrame(df)
@@ -36,14 +35,6 @@ def preprocess(text):
     df_services = df[df['sections']=='services']
     df_list = [df_community, df_for_sale, df_housing, df_services]
     return df_list
-
-def preprocess_1(text):
-    cities, sections, headings, categories = [], [], [], []
-    for line in text:
-        if line.strip():
-            rows = json.loads(line)
-            headings.append(clean_text(rows.get('heading', '').lower()))
-    return headings
 
 def train(combined_text, labels):
     model = Pipeline([('vec', TfidfVectorizer()), ('clf', LinearSVC())])
@@ -80,16 +71,5 @@ if __name__ == "__main__":
     test_idx = pd.concat([*df_test_list], axis=0, ignore_index=True)['index']
     pred.index = test_idx.values
     pred = pred.sort_index()
-
-    #test_raw_data = preprocess_1(in_data[1:])
-    #test_1 = pd.concat([*df_test_list], axis=0)
-    #test_1 = test_1.set_index('index').loc[pred.index]
-    #test_1 = pd.DataFrame({'raw_heading': test_raw_data, 'heading_after_modeling':test_1['headings']})
-    #print(test_1)
-
-    with open('test_pred.txt', 'w') as f:
-        for p in pred:
-            f.write(f'{reverse_dict[p]}\n')
-
-    #for p in pred:
-    #    print(reverse_dict[p])
+    for p in pred:
+        print(reverse_dict[p])
