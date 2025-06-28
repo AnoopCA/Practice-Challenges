@@ -6,9 +6,8 @@ if __name__ == "__main__":
     #data = sys.stdin.read().split('\n')
     in_path = r"D:\ML_Projects\Practice-Challenges\sampleCaptchas\input"    # input00.txt
     out_path = r"D:\ML_Projects\Practice-Challenges\sampleCaptchas\output"  # output00.txt
-    char_dict_all = {}
+    char_dict = {}
     char_map_num = 0
-    check_char = 0
     for file_num in range(25):
         f_num = f"{file_num:02}"
         file_path = os.path.join(in_path, "input" + f_num + ".txt")
@@ -31,7 +30,6 @@ if __name__ == "__main__":
                     temp_list.append(temp[5:50])
                     #print(temp[5:50])
             #print('-')
-            char_dict = {}
             for cap_row in temp_list:
                 start = 0
                 end = start + 9
@@ -43,29 +41,12 @@ if __name__ == "__main__":
                     start = end
                     end += 9
             char_map_num += 1
-            for key_in,value_in in char_dict.items():
-                if not char_dict_all:
-                    char_dict_all[key_in] = value_in
-                else:
-                    for key_stored,value_stored in char_dict_all.items():
-                        char_not_exist = False
-                        check_list = []
-                        for ln in range(len(value_in)):
-                            if value_in[ln] != value_stored[ln]:
-                                char_not_exist = True
-                                check_list.append(char_not_exist)
-                        if char_not_exist:
-                            char_dict_all[key_in] = value_in
-                            check_char += 1
-                        break
-                    print(check_list)
-        #break
-    #print(check_char)
-    for key,value in char_dict_all.items():
-        print(key)
-        for i in value:
-            print(i)
-        
+            for key,value in char_dict.items():
+                for ltr in value:
+                    print(ltr)
+                print('-')
+        break
+
     captcha_list = []
     for file_num in range(25):
         f_num = f"{file_num:02}"
