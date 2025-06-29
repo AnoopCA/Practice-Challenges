@@ -47,25 +47,23 @@ if __name__ == "__main__":
                 if not char_dict_all:
                     char_dict_all[key_in] = value_in
                 else:
-                    for key_stored,value_stored in char_dict_all.items():
-                        char_not_exist = False
-                        check_list = []
+                    char_check_list = []
+                    temp_list_for = list(char_dict_all.items())
+                    for idx, (key_stored,value_stored) in enumerate(temp_list_for):
+                        temp_list_trues = []
                         for ln in range(len(value_in)):
                             if value_in[ln] != value_stored[ln]:
-                                char_not_exist = True
-                                check_list.append(char_not_exist)
-                        if char_not_exist:
-                            char_dict_all[key_in] = value_in
-                            check_char += 1
-                        break
-                    print(check_list)
+                                temp_list_trues.append(True)
+                        char_check_list.append(temp_list_trues)
+                    for lst in range(len(char_check_list)):
+                        if len(char_check_list[lst]) == 10:
+                            break
+                        else:
+                            if lst == (len(char_check_list)-1):
+                                char_dict_all[key_in] = value_in
+
         #break
-    #print(check_char)
-    for key,value in char_dict_all.items():
-        print(key)
-        for i in value:
-            print(i)
-        
+    
     captcha_list = []
     for file_num in range(25):
         f_num = f"{file_num:02}"
