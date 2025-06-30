@@ -6,8 +6,9 @@ if __name__ == "__main__":
     #data = sys.stdin.read().split('\n')
     in_path = r"D:\ML_Projects\Practice-Challenges\sampleCaptchas\input"    # input00.txt
     out_path = r"D:\ML_Projects\Practice-Challenges\sampleCaptchas\output"  # output00.txt
-    char_dict = {}
+    char_dict_all = {}
     char_map_num = 0
+    check_char = 0
     for file_num in range(25):
         f_num = f"{file_num:02}"
         file_path = os.path.join(in_path, "input" + f_num + ".txt")
@@ -30,6 +31,7 @@ if __name__ == "__main__":
                     temp_list.append(temp[5:50])
                     #print(temp[5:50])
             #print('-')
+            char_dict = {}
             for cap_row in temp_list:
                 start = 0
                 end = start + 9
@@ -41,12 +43,28 @@ if __name__ == "__main__":
                     start = end
                     end += 9
             char_map_num += 1
-            for key,value in char_dict.items():
-                for ltr in value:
-                    print(ltr)
-                print('-')
-        break
+            for key_in,value_in in char_dict.items():
+                if not char_dict_all:
+                    char_dict_all[key_in] = value_in
+                else:
+                    char_check_list = []
+                    temp_list_for = list(char_dict_all.items())
+                    for idx, (key_stored,value_stored) in enumerate(temp_list_for):
+                        temp_list_trues = []
+                        for ln in range(len(value_in)):
+                            if value_in[ln] == value_stored[ln]:
+                                temp_list_trues.append(True)
+                        char_check_list.append(temp_list_trues)
+                    for lst in range(len(char_check_list)):
+                        if len(char_check_list[lst]) == 10:
+                            break
+                        else:
+                            if lst == (len(char_check_list)-1):
+                                char_dict_all[key_in] = value_in
 
+        #break
+    print(len(char_dict_all))
+    
     captcha_list = []
     for file_num in range(25):
         f_num = f"{file_num:02}"
