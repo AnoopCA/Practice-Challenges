@@ -10,12 +10,12 @@ if __name__ == "__main__":
         data = f.readlines()
     data = [int(i.strip()) for i in data[1:]]
 
-    for w_check in range(2, 51):
+    for w_iter in range(2, 51):
         sma_list = []
         wma_list = []
         ewma_list = []
         for i in range(1, len(data)):
-            w = w_check
+            w = w_iter
             w_len = min(i, w)
             window_data = pd.Series(data[:i+1])
 
