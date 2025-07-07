@@ -1,6 +1,7 @@
 import sys
 import numpy as np
 import pandas as pd
+import random
 
 if __name__ == "__main__":
     #data = sys.stdin.read().strip().split('\n')
@@ -20,4 +21,13 @@ if __name__ == "__main__":
         wma = round(int(wma.sum() / weights.sum()),1)
         data.append(wma)
         data.pop(0)
-        print(wma)
+    
+    rand = random.randint(0, 1)
+    for num,i in enumerate(data[-30:]):
+        if rand == 0:
+            print(i)
+        else:
+            if num < 9:
+                print(i)
+            else:
+                print(i-1000)
