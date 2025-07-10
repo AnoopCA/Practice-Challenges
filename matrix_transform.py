@@ -5,36 +5,38 @@
 import numpy as np
 
 def transform_matrix(A, T, S):
-    try:
-        # Check if T and S are square matrices
-        if T.shape[0] != T.shape[1] or S.shape[0] != S.shape[1]:
-            return -1
+	try:
+		# Check if T and S are square matrices
+		if T.shape[0] != T.shape[1] or S.shape[0] != S.shape[1]:
+			return -1
 
-        # Check if dimensions are compatible for the operation
-        if T.shape[1] != A.shape[0] or A.shape[1] != S.shape[0]:
-            return -1
+		# Check if dimensions are compatible for the operation
+		if T.shape[1] != A.shape[0] or A.shape[1] != S.shape[0]:
+			return -1
 
-        # Compute the inverses
-        T_inv = np.linalg.inv(T)
-        # Perform the transformation
-        result = T_inv @ A @ S
-        return result
-    except np.linalg.LinAlgError:
-        # Raised if T or S are not invertible
-        return -1
+		# Compute the inverses
+		T_inv = np.linalg.inv(T)
+		# Perform the transformation
+		result = T_inv @ A @ S
+		return result
+	except np.linalg.LinAlgError:
+		# Raised if T or S are not invertible
+		return -1
+
 
 # Matrix-Vector Dot Product:
 def matrix_dot_vector(a: list[list[int|float]], b: list[int|float]) -> list[int|float]:
-    if len(b) != len(a[0]):
-        return -1
-    else:
-        dot_list = []
-        for i in a:
-            temp = 0
-            for j in range(len(i)):
-                temp += (i[j] * b[j])
-            dot_list.append(temp)
-        return dot_list
+	if len(b) != len(a[0]):
+		return -1
+	else:
+		dot_list = []
+		for i in a:
+			temp = 0
+			for j in range(len(i)):
+				temp += (i[j] * b[j])
+			dot_list.append(temp)
+		return dot_list
+
 
 # Transpose of a matrix:
 def transpose_matrix(a: list[list[int|float]]) -> list[list[int|float]]:
@@ -44,9 +46,9 @@ def transpose_matrix(a: list[list[int|float]]) -> list[list[int|float]]:
 			b[j].append(i[j])
 	return b
 
+
 # Reshape Matrix:
 import numpy as np
-
 def reshape_matrix(a: list[list[int|float]], new_shape: tuple[int, int]) -> list[list[int|float]]:
 	a = [j for i in a for j in i]
 	if (new_shape[0] * new_shape[1]) != len(a):
@@ -60,4 +62,54 @@ def reshape_matrix(a: list[list[int|float]], new_shape: tuple[int, int]) -> list
 			idx += 1
 		reshaped_matrix.append(temp_list)
 	return reshaped_matrix
+
+
+# Mean by Row or Column:
+def calculate_matrix_mean(matrix: list[list[float]], mode: str) -> list[float]:
+	if mode == "row":
+		means = [sum(i)/len(i) for i in matrix]
+	else:
+		means = [[] for _ in range(len(matrix[0]))]
+		for row_list in matrix:
+			for j in range(len(means)):
+				means[j].append(row_list[j])
+		means = [sum(i)/len(i) for i in means]
+	return means
+
+
+# Eigenvalues of a Matrix:
+def calculate_eigenvalues(matrix: list[list[float|int]]) -> list[float]:
+	ad = matrix[0][0]+matrix[1][1]
+	bc = (matrix[0][0]*matrix[1][1]) - (matrix[0][1]*matrix[1][0])
+	l1 = (ad + ((ad)**2 - 4*(bc))**0.5) / 2
+	l2 = (ad - ((ad)**2 - 4*(bc))**0.5) / 2
+	eigenvalues = [l1, l2]
+	return eigenvalues
+
+
+# Matrix Transformation: T^−1 . A . S
+import numpy as np
+def transform_matrix(A: list[list[int|float]], T: list[list[int|float]], S: list[list[int|float]]) -> list[list[int|float]]:
+	if np.isclose(np.linalg.det(T), 0) or np.isclose(np.linalg.det(S), 0):
+		return -1
+	A = np.array(A)
+	T = np.array(T)
+	S = np.array(S)
+	T_inv = np.linalg.inv(T)
+	T_inv_A = np.dot(T_inv, A)
+	transformed_matrix = np.dot(T_inv_A, S)
+	return transformed_matrix
+
+
+# Calculate 2x2 Matrix Inverse:
+def inverse_2x2(matrix: list[list[float]]) -> list[list[float]]:
+	a, b, c, d = matrix[0][0], matrix[0][1], matrix[1][0], matrix[1][1]
+	det = a*d - b*c
+	if det == 0:
+		return None
+	mul = 1 / (a*d - b*c)
+	a, b, c, d = a*mul, b*mul, c*mul, d*mul
+	inverse = [[d, -b], [-c, a]]
+	return inverse
+
 
