@@ -113,3 +113,22 @@ def inverse_2x2(matrix: list[list[float]]) -> list[list[float]]:
 	return inverse
 
 
+# Multiply two matrices:
+def matrixmul(a:list[list[int|float]],
+              b:list[list[int|float]])-> list[list[int|float]]:
+    if len(a[0]) != len(b):
+        return -1
+    c = []
+    for i in a:
+        temp = 0
+        temp_list = []
+        for j in range(len(b[0])):
+            temp_list_in = []
+            for num,k in enumerate(b):
+                temp_list_in.append(i[num] * k[j])
+            temp_list.append(sum(temp_list_in))
+        c.append(temp_list)
+    return(c)
+
+
+# Calculate Covariance Matrix:
