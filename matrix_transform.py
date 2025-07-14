@@ -133,6 +133,8 @@ def matrixmul(a:list[list[int|float]],
 
 # Calculate Covariance Matrix:
 def calculate_covariance_matrix(vectors: list[list[float]]) -> list[list[float]]:
-	
+	a = len(vectors)
+	b = len(vectors[0])
+
 	return []
 
