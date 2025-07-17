@@ -138,3 +138,24 @@ def calculate_covariance_matrix(vectors: list[list[float]]) -> list[list[float]]
 	for i in range(num_features):
 		row = []
 	return []
+
+def mean(values):
+    return sum(values) / len(values)
+
+def covariance(x, y):
+    x_mean = mean(x)
+    y_mean = mean(y)
+    return sum((xi - x_mean) * (yi - y_mean) for xi, yi in zip(x, y)) / (len(x) - 1)
+
+def covariance_matrix(data):
+    num_features = len(data)
+    cov_matrix = []
+
+    for i in range(num_features):
+        row = []
+        for j in range(num_features):
+            cov = covariance(data[i], data[j])
+            row.append(cov)
+        cov_matrix.append(row)
+    
+    return cov_matrix
