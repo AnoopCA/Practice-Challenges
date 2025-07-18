@@ -150,12 +150,10 @@ def covariance(x, y):
 def covariance_matrix(data):
     num_features = len(data)
     cov_matrix = []
-
     for i in range(num_features):
         row = []
         for j in range(num_features):
             cov = covariance(data[i], data[j])
             row.append(cov)
         cov_matrix.append(row)
-    
     return cov_matrix
