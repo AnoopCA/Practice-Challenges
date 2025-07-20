@@ -18,8 +18,10 @@ median = round(median, 1)
 # Mode
 nums_counts = {}
 for i in range(n):
+    # Skip last two indices to avoid index out of range
     if (i != (n-1)) and (i != (n-2)):
         if nums[i] == nums[i+1]:
+             # If the number is already in the dictionary, increment the count
             if nums[i] in nums_counts:
                 nums_counts[nums[i]] = nums_counts[nums[i]] + 1
             else:
