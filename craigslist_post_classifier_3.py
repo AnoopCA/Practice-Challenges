@@ -54,11 +54,8 @@ if __name__ == "__main__":
         y_train = [label_dict[cat] for cat in df_train_list[i]['categories']]
         model = train(X_train, y_train)
         model_list.append(model)
-        #score = model.score(X_train, y_train)
-        #print(f"Training score for model {i} (section: {df_train_list[i]['sections'].iloc[0]}): {score:.4f}")
     
     reverse_dict = {v: k for k, v in label_dict.items()}
-    #in_data = sys.stdin.read().strip().split('\n')
     with open('craigslist_test.json', 'r', encoding='utf-8') as f:
         in_data = f.readlines()
     df_test_list = preprocess(in_data[1:])
