@@ -1,6 +1,8 @@
 from sklearn.pipeline import Pipeline
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.linear_model import SGDClassifier
+
+# Load and parse training data
 x_train=[] 
 y_train=[]
 with open('trainingdata.txt') as f: 
@@ -12,6 +14,8 @@ with open('trainingdata.txt') as f:
         x_train.append( " ".join(temp[1:n]) )
 
 inp = int(input())
+
+# Define and train the text classification pipeline
 x_test=[]
 text_clf = Pipeline([('vect', CountVectorizer()),('clf', SGDClassifier(loss='hinge', penalty='l2', alpha=1e-3, max_iter=8, random_state=42))])
 text_clf = text_clf.fit(x_train,y_train)
