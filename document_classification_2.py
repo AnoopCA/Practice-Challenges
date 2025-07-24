@@ -23,6 +23,7 @@ for data in range(inp):
     temp = str(input()) 
     x_test.append(temp)
 
+# Predict and print the output
 output=text_clf.predict(x_test)
 for i in range(inp): 
     print(output[i])
