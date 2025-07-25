@@ -6,6 +6,7 @@ from sklearn.pipeline import Pipeline
 from sklearn.svm import LinearSVC
 import pandas as pd
 
+# Removes HTML entities, non-alphanumeric characters, and extra spaces
 def clean_text(text):
     text = re.sub(r'&[^ ]*?;', ' ', text)
     text = re.sub(r'[^A-Za-z0-9\s]', ' ', text)
@@ -13,6 +14,7 @@ def clean_text(text):
     text = re.sub(r'\s+', ' ', text)
     return text
 
+# Extracts and cleans 'city', 'section', 'heading', and 'category' fields. Combines them into a single text feature per entry
 def preprocess(text):
     cities, sections, headings, categories = [], [], [], []
     for line in text:
@@ -31,11 +33,13 @@ def preprocess(text):
     else:
         return combined_text, categories
 
+# Builds a pipeline with TF-IDF vectorization and Linear SVM classifier
 def train(combined_text, labels):
     model = Pipeline([('vec', TfidfVectorizer()), ('clf', LinearSVC())])
     model.fit(combined_text, labels)
     return model
 
+# Loads data, preprocesses it, trains the model, then reads test input from stdin and predicts categories
 if __name__ == "__main__":
     with open('training.json', 'r') as f:
         lines = f.readlines()[1:]
