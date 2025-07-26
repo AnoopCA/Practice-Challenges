@@ -47,6 +47,7 @@ def train(combined_text, labels):
     return model
 
 if __name__ == "__main__":
+    # Define category labels and mapping dictionary
     categories = ['appliances', 'artists', 'photography', 'video-games', 'wanted-housing', 'household-services', 'cell-phones', 'temporary', 'automotive', 'real-estate', 'childcare', 'activities', 'shared', 'housing', 'therapeutic', 'general']
     label_dict = {cat: idx for idx, cat in enumerate(categories)}
     with open('training.json', 'r') as f:
@@ -60,10 +61,12 @@ if __name__ == "__main__":
         model = train(X_train, y_train)
         model_list.append(model)
     
+    # Load and Preprocess Test Data
     reverse_dict = {v: k for k, v in label_dict.items()}
     with open('craigslist_test.json', 'r', encoding='utf-8') as f:
         in_data = f.readlines()
     df_test_list = preprocess(in_data[1:])
+    # Make Predictions on Test Data
     pred_list = []
     for i in range(len(df_test_list)):
         X_test = df_test_list[i]['headings'] + ' ' + df_test_list[i]['cities']
