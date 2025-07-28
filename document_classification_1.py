@@ -7,14 +7,17 @@ from sklearn.naive_bayes import MultinomialNB
 #from sklearn.model_selection import GridSearchCV
 #from sklearn.model_selection import train_test_split
 
+# Load and Preprocess Training Data
 train = pd.read_csv('trainingdata.txt', header=None, names=['text'])
 train = train.iloc[1:].reset_index(drop=True)
 
+# Extract labels and clean text
 train['labels'] = train['text'].apply(lambda x: int(x[0]))
 train['text'] = train['text'].apply(lambda x: x[1:].strip())
 train['text'] = train['text'].apply(lambda x: str.lower(x))
 train['text_len'] = train['text'].apply(lambda x: len(x))
 
+# Balance the Dataset by Oversampling
 max_size = train['labels'].value_counts().max()
 lst = [train]
 for class_index, group in train.groupby('labels'):
@@ -24,6 +27,7 @@ text = df_balanced['text']
 text_len = df_balanced['text_len']
 y_train = df_balanced['labels']
 
+# Separate features and labels
 bow_model = CountVectorizer()
 bow_train = bow_model.fit_transform(text)
 tfidf_model = TfidfVectorizer()
@@ -42,6 +46,7 @@ bow_tfidf_train = hstack((bow_train, tfidf_train, text_len)).tocsr()
 #print(param_values)
 #print(CV_scores)
 
+# Train Final Naive Bayes Model
 X_train = bow_tfidf_train
 nb_model = MultinomialNB(alpha=0.01)
 nb_model.fit(X_train, y_train)
