@@ -7,6 +7,8 @@ from sklearn.metrics import f1_score
 import warnings
 warnings.filterwarnings('ignore')
 
+# Converts raw input strings into structured numeric format suitable for model input.
+# Handles both training and test data based on the `task` argument. Maps hero names to integers and, for training, maps labels to binary.
 def preprocess(data_in, task):
     data_in = [[j for j in i.strip().split(',')] for i in data_in]
     char_cols = ['tm_1_chr_1','tm_1_chr_2','tm_1_chr_3','tm_1_chr_4','tm_1_chr_5','tm_2_chr_1','tm_2_chr_2','tm_2_chr_3','tm_2_chr_4','tm_2_chr_5']
@@ -43,6 +45,7 @@ if __name__ == "__main__":
     rf_model = RandomForestClassifier()
     rf_model.fit(X_train, y_train)
 
+    # Read test input from stdin and make predictions
     data_in = sys.stdin.read().strip().split('\n')
     k = int(data_in[0])
     data = preprocess(data_in[1:], 'test')
