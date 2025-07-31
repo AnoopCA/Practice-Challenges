@@ -28,4 +28,5 @@ for idx_1,row in enumerate(idx_lst):
     for idx_2,elem in enumerate(row):
         if elem == 1:
             temp_lst.append(idx_2)
-    print(len(temp_lst))
+    if temp_lst:
+        print(temp_lst[len(temp_lst)//2])
