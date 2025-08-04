@@ -18,11 +18,6 @@ for i in pixels:
             temp_list.append(0)
     idx_lst.append(temp_list)
 
-#with open('text_out.txt', 'w') as f:
-#    for l in idx_lst:
-#        line = ''.join(str(i) for i in l)
-#        f.write(line + '\n')
-
 for idx_1,row in enumerate(idx_lst):
     temp_lst = []
     for idx_2,elem in enumerate(row):
