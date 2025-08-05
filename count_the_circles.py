@@ -7,7 +7,7 @@ with open('count_the_circles_test_cases.txt', 'r') as f:
 
 pixels = [[int(sum(int(k) for k in j.split(','))/3) for j in i.split()] for i in data[1:]]
 
-idx_lst = []
+pxl_lst = []
 
 for i in pixels:
     temp_list = []
@@ -16,12 +16,26 @@ for i in pixels:
             temp_list.append(1)
         else:
             temp_list.append(0)
-    idx_lst.append(temp_list)
+    pxl_lst.append(temp_list)
 
-for idx_1,row in enumerate(idx_lst):
+#with open('text_out.txt', 'w') as f:
+#    for l in idx_lst:
+#        line = ''.join(str(i) for i in l)
+#        f.write(line + '\n')
+
+circle_list = []
+for idx_row,row in enumerate(pxl_lst):
     temp_lst = []
-    for idx_2,elem in enumerate(row):
-        if elem == 1:
-            temp_lst.append(idx_2)
+    for idx_col,pxl in enumerate(row):
+        if pxl == 1:
+            temp_lst.append(idx_col)
     if temp_lst:
-        print(temp_lst[len(temp_lst)//2])
+        top_idx = temp_lst[len(temp_lst)//2]
+        for temp_col in range(idx_row, len(pxl_lst)):
+            if pxl_lst[temp_col][top_idx] == 0:
+                circle_list.append((top_idx, temp_col))
+                break
+circle_list = list(set(circle_list))
+
+for i in circle_list:
+    print(i)
