@@ -32,6 +32,10 @@ for idx_row,row in enumerate(pxl_lst):
     if temp_lst:
         top_idx = temp_lst[len(temp_lst)//2]
         for temp_col in range(idx_row, len(pxl_lst)):
+            if circle_list:
+                for rw,cl in circle_list:
+                    if (rw == top_idx) and (cl < temp_col):
+                        break
             if pxl_lst[temp_col][top_idx] == 0:
                 circle_list.append((top_idx, temp_col))
                 break
