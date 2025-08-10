@@ -1,7 +1,7 @@
 import sys
 
 #data = sys.stdin.read().strip().split('\n')
-with open('count_the_circles_test_cases.txt', 'r') as f:
+with open('count_the_circles_test_cases_2.txt', 'r') as f:
     data = f.readlines()
 
 pixels = [[int(sum(int(k) for k in j.split(','))/3) for j in i.split()] for i in data[1:]]
@@ -11,16 +11,16 @@ pxl_lst = []
 for i in pixels:
     temp_list = []
     for j in i:
-        if j < 200:
-            temp_list.append(1)
+        if j < 50:
+            temp_list.append(1) #0
         else:
-            temp_list.append(0)
+            temp_list.append(0) #1
     pxl_lst.append(temp_list)
 
-#with open('text_out.txt', 'w') as f:
-#    for l in idx_lst:
-#        line = ''.join(str(i) for i in l)
-#        f.write(line + '\n')
+with open('text_out_2.txt', 'w') as f:
+    for l in pxl_lst:
+        line = ''.join(str(i) for i in l)
+        f.write(line + '\n')
 
 circle_list = []
 for idx_row,row in enumerate(pxl_lst):
