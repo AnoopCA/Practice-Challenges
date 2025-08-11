@@ -67,31 +67,23 @@ C, R = [int(x) for x in tmp.split()]
 tmp = input()
 y = 0
 grid = np.zeros((C, R), dtype=np.int16)
-#gridRGB = np.array([], dtype=np.int8) # RGB
 n =0
-#myDict = {}
 allColors = []
 while True:
     tmp2 = tmp.replace(' \n','')
     tmp2 = tmp.replace('\n','')
     tmp3 = tmp2.split(' ')
     rowData = [ x[0] +'-'+x[1]+'-'+ x[2] for x in [c.split(',') for c in tmp3]]
-    #rowData = [ '{0:02X}'.format(int(x[0]))+'{0:02X}'.format(int(x[1]))+'{0:02X}'.format(int(x[2])) for x in [c.split(',') for c in tmp3]]
-    #rowData = [ [int(x[0]), int(x[1]), int(x[2]) ] for x in [c.split(',') for c in tmp3]]
     for x, c in enumerate(rowData):
         if not(c in allColors):
             allColors.append(c)
         grid[y,x] = allColors.index(c)
-
     y += 1
     try:
-
         tmp = input()
         if not tmp: break
     except EOFError:
         break
-
-
 
 modesG = []
 for i in range(10): # 10 lines should be enough
@@ -100,26 +92,19 @@ for i in range(10): # 10 lines should be enough
         elif j == 1: modeGrid = mode(grid[C-i-1,:])
         elif j == 2: modeGrid = mode(grid[:, i])
         else: modeGrid = mode(grid[:, R-i-1])
-        #print(modeGrid)
         lenMode = modeGrid[1][0]
         valMode = modeGrid[0][0]
         if lenMode/C > 0.75 and not (valMode in modesG):
             if len(modesG)==0: modesG = [[valMode]]
             else: modesG.append([valMode])
 
-
-#grid[grid in modesG] = 0
 board = np.ones((C, R)) * 255
 for i in modesG:
     board[np.where(grid == i)] = 0
 
-
-
-#allDone = False
 nCircles = 0
 i = 0
 while i < C:
-#for i in range(C):
     a, b = (0, 0)
     while a < R:
         if board[i, a] == 0:
@@ -138,7 +123,6 @@ while i < C:
                     break
                 x = lenAB // 2 + a
                 y = (y0 - y1) // 2 + i
-                #print(i, a, b, y1, y0, x, y)
 
                 diamCir = (y0 - y1) // 2 - 1 # estimate diameter
                 if x + diamCir//2 +1 > R: diamCir -= 1
@@ -150,7 +134,6 @@ while i < C:
                     floodFill4(board, y, x, 0)
                     nCircles += 1
                 else:
-                    #print('>>> ',a,b,y1,y0, diamCir)
                     board[y1:y0, a:b] = 0
             else:
                 a = b+1
