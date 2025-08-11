@@ -1,10 +1,8 @@
 import sys
 import numpy as np
 from scipy import ndimage
-#from sklearn.cluster import spectral_clustering, DBSCAN
 
 img = sys.stdin.readlines()
-#print(img)
 width, length = (int(i) for i in img[0].split())
 for i in range(1,len(img)):
     img[i] = img[i].split()
@@ -12,18 +10,8 @@ for i in range(1,len(img)):
         img[i][j] = [int(k) for k in img[i][j].split(',')]
         
 img.pop(0)
-#print(img)
-#print(width, length)
 img = np.array(img)
 boundary = img[20][30]
-
-#def erosion(cluster, factor=2):
-#    eroded = np.full(cluster.shape, False, dtype=bool)
-#    for i in range(factor,cluster.shape[0]-factor):
-#        for j in range(factor,cluster.shape[1]-factor):
-#            if all(cluster[ind1][ind2] for ind1 in range(i-factor,i+factor+1) for ind2 in range(j-factor,j+factor+1)):
-#                eroded[i][j] = True
-#    return eroded
 
 def dfs(start):
     n = width
