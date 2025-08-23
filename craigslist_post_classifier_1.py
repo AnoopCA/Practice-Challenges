@@ -1,3 +1,4 @@
+# Import Required Libraries
 import sys
 import numpy as np
 import re
@@ -10,6 +11,7 @@ from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import f1_score
 
+# Text cleaning
 def clean_text(text):
     text = re.sub(r'&[^ ]*?;', ' ', text)
     text = re.sub(r'[^A-Za-z\s]', ' ', text)
@@ -17,6 +19,7 @@ def clean_text(text):
     text = re.sub(r'\s+', ' ', text)
     return text
 
+# Data preprocessing
 def preprocess(text):
     cities, sections, headings, categories = [], [], [], []
     for line in text:
@@ -32,6 +35,7 @@ def preprocess(text):
     else:
         return combined_text, categories
 
+# Model training
 def train():
     with open('training.json', 'r') as f:
         data = f.readlines()
