@@ -23,7 +23,8 @@ def cosine_sim(wd1, wd2):
 
 #data = sys.stdin.read().strip().split('\n')
 
-data = ['bberant', 'bberation', 'bbrieviated']
+data = ['bberant', 'bberation', 'bbrieviated', 'bbriviated', 'bbriviation', 'bcess', 'beration', 'berrent', 'bilites', 'billity', 'bilty', 'bit of',
+        'bnormalites', 'bondon', 'bortificant', 'breviate', 'breviation', 'britrary', 'bscence' 'bsense', 'bsorbancy', 'bsorbant', 'bsorbsion', 'bsorbtion']
 
 wd_score = 0
 match_text = ''
