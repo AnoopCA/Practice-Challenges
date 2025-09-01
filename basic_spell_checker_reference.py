@@ -4,7 +4,7 @@ from string import ascii_lowercase
 
 
 def words(text):
-    return re.findall(r'(?:[a-z]+[a-z\'\-]?[a-z]|[a-z]+)', text.lower())
+    return re.findall(r"[a-z]+(?:['\-][a-z]+)?", text.lower())
 
 def create_vocabulary():
     v = Counter(words(open('corpus.txt').read()))
