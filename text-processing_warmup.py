@@ -1,11 +1,15 @@
 import sys
 import re
 
+# Read and Preprocess Input Data
 data = sys.stdin.read().strip().split('\n')
 
+# Filter out lines with length <= 1
 data_1 = [i for i in data if len(i)>1]
+# List of month abbreviations
 mnths = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec']
 
+# Process Each Line of Input
 for text in data_1:
     found_a = re.findall(r'\ba\b', text, flags=re.IGNORECASE)
     found_an = re.findall(r'\ban\b', text, flags=re.IGNORECASE)
@@ -48,6 +52,7 @@ for text in data_1:
                 if words[i-1].isdigit() and words[i-2].isdigit():
                     found_date += 1
     
+    # Print Results for Current Line
     print(len(found_a))
     print(len(found_an))
     print(len(found_the))
