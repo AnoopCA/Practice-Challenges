@@ -1,12 +1,16 @@
 import numpy as np
 from scipy.stats import mode
 
+# Flood Fill (4-directional) 
 def floodFill4(image, sr, sc, newColor):
     dxs = [1, 0, -1, 0]
     dys = [0, 1, 0, -1]
     queue = [(sr, sc)]
+    # Get the starting pixel's color
     oldColor = image[sr][sc]
+    # Change start pixel to new color
     image[sr][sc] = newColor
+    # BFS-based flood fill
     while queue:
         x, y = queue.pop(0)
         for dx, dy in zip(dxs, dys):
@@ -18,6 +22,7 @@ def floodFill4(image, sr, sc, newColor):
     #return image
     return ''
 
+# Draw a Circle (Midpoint Circle Algorithm)
 def drawcircle(myGrid, x0, y0, radius, myVal, R, C):
     x = radius-1
     y = 0
